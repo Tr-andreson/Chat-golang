@@ -72,9 +72,14 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	go client.readPump()
 }
 
+func Health(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(200)
+	w.Write([]byte("OK"))
+}
 
 func main() {
 	mux := http.NewServeMux()
+	mux.HandleFunc("/health", Health)
 	mux.HandleFunc("/ws", wsHandler)
 
 	server := &http.Server{
