@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    deploy:
+      resources:
+        limits:
+          memory: 512M        # Hard limit (container can't exceed this)
+        reservations:
+          memory: 128M        # Soft limit (guaranteed amount)
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+
+  db:
+    image: postgres:15
+    deploy:
+      resources:
+        limits:
+          memory: 512M        # Hard limit (container can't exceed this)
+        reservations:
+          memory: 128M        # Soft limit (guaranteed amount)
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chat
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    deploy:
+      resources:
+        limits:
+          memory: 512M        # Hard limit (container can't exceed this)
+        reservations:
+          memory: 128M        # Soft limit (guaranteed amount)
+    ports:
+      - "6379:6379"
