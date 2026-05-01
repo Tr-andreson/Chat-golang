@@ -77,10 +77,12 @@ func Health(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK"))
 }
 
+
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/health", Health)
 	mux.HandleFunc("/ws", wsHandler)
+	mux.Handle("/", http.FileServer(http.Dir("./public")))
 
 	server := &http.Server{
 		Addr:         ":8000",
